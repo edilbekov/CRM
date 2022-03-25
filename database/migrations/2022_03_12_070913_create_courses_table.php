@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Course;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,7 @@ class CreateCoursesTable extends Migration
             $table->foreignId('group_id');
             $table->foreignId('student_id');
             $table->double('price');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

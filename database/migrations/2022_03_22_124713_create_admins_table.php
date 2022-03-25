@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-class CreateAddTeachersTable extends Migration
+class CreateAdminsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +14,19 @@ class CreateAddTeachersTable extends Migration
      */
     public function up()
     {
-        Schema::create('add_teachers', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('surname');
-            $table->string('teacher');
             $table->string('phone');
             $table->string('password');
-            $table->boolean('active')->default(true);
             $table->timestamps();
         });
+
+        Admin::create([
+            'name'=>'Azizbek',
+            'phone'=>'+998907362044',
+            'password'=>'qwerty'
+        ]);
     }
 
     /**
@@ -32,6 +36,6 @@ class CreateAddTeachersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('add_teachers');
+        Schema::dropIfExists('admins');
     }
 }

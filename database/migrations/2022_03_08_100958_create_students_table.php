@@ -17,12 +17,13 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
-            $table->integer('phone');
+            $table->string('phone');
             $table->string('password');
             $table->string('group');
             $table->string('teacher');
             $table->string('days');
             $table->string('hour');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

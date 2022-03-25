@@ -24,7 +24,9 @@ class StudentController extends Controller
             'password'=>$password
         ]);
 
-        return "success";
+        return response([
+            'message'=> 'successful'
+        ], 200);
     }
     public function edit(Request $request){             
         $request->validate([
