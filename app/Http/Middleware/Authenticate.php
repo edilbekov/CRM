@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
@@ -18,4 +19,11 @@ class Authenticate extends Middleware
             return route('login');
         }
     }
+
+    // public function handle($request, Closure $next, ...$guards)
+    // {
+    //     $request->headers->set('X-Requested-With', 'XMLHttpRequest');
+    //     $request->authenticate($request, $guards);
+    //     return $next($request);
+    // }
 }

@@ -15,12 +15,13 @@ class CreateGroupsTable extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->string('name');            
-            $table->foreignId('teacher_id');
-            $table->string('days');
-            $table->string('hour');
-            $table->string('start_time');
-            $table->string('end_time');            
+            $table->foreignIdFor(App\Models\Teacher::class);
+            $table->foreignIdFor(App\Models\Period::class);
+            $table->string('name');                        
+            $table->string('days');            
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
