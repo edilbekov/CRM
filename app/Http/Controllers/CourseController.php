@@ -43,4 +43,8 @@ class CourseController extends Controller
         Course::where('id',$id)->delete();
         return ResponseController::success();
     }
+    public function view(){
+        $all=Course::all();
+        return ResponseController::data($all);
+    }
 }
