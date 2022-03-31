@@ -16,18 +16,15 @@ class StudentController extends Controller
             'surname'=>'required|min:5|max:15',            
             'phone'=>'required|min:9|max:13'
         ]);
-        $password=Hash::make($request->name.'123');
+        $password=Hash::make($request->name);
 
-        $true=Student::create([
+        Student::create([
             'name'=>$request->name,
             'surname'=>$request->surname,            
             'phone'=>$request->phone,
             'password'=>$password
-        ]);
-        if($true){
-            return ResponseController::success();
-        }
-        return ResponseController::error(['message'=>$true->errors()]);
+        ]);        
+        return ResponseController::success();        
     }
     public function edit(Request $request,$id){             
         $request->validate([

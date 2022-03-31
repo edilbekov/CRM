@@ -18,7 +18,7 @@ class CreateGroupsTable extends Migration
             $table->foreignIdFor(App\Models\Teacher::class);
             $table->foreignIdFor(App\Models\Period::class);
             $table->string('name');                        
-            $table->string('days');            
+            $table->json('days');
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('active')->default(true);

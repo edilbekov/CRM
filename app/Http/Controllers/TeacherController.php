@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Teacher;
+use App\Models\Verification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
@@ -17,7 +18,7 @@ class TeacherController extends Controller
             'teacher'=>'required',
             'phone'=>'required|min:9|max:13|unique:teachers,phone'            
         ]);
-        $password=Hash::make($request->name.'123');
+        $password=Hash::make($request->name);
 
         $true=Teacher::create([
             'name'=>$request->name,
@@ -54,22 +55,23 @@ class TeacherController extends Controller
         return ResponseController::success();
     }
 
-    public function verification(Request $request){
+    public function verification(Request $request,$student_id){
         $verification=$request->verification;
-        if($verification==1){
-            
+        $group_id=Group::select('id')->where('student_id',$student_id)->first();
+        if($verification==true){
+            Verification::create([
+                'group_id'=>$group_id,
+                'student_id'=>$student_id,
+                'exist'=>true
+            ]);
         }
-        elseif($verification==0){
-
+        elseif($verification==false){
+            Verification::create([
+                'group_id'=>$group_id,
+                'student_id'=>$student_id,
+                'exist'=>false
+            ]);
         }
-        else{
-            return "Error";
-        }
-        return back();
-    }
-
-    public function schedule(){
-        $groups=Group::all();
-        return $groups;
+        return ResponseController::success();
     }
 }

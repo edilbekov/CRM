@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePeriodsTable extends Migration
+class CreateEmployersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreatePeriodsTable extends Migration
      */
     public function up()
     {
-        Schema::create('periods', function (Blueprint $table) {
+        Schema::create('employers', function (Blueprint $table) {
             $table->id();
-            $table->integer('period');
-            $table->time('start_time');
-            $table->time('finish_time');
+            $table->string('full_name');
+            $table->string('phone')->unique();
+            $table->string('password');
+            $table->enum('role',['admin','teacher']);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreatePeriodsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('periods');
+        Schema::dropIfExists('employers');
     }
 }
