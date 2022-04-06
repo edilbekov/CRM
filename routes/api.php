@@ -51,6 +51,7 @@ Route::post('/login',[AuthController::class,'login']);
 //Verification
 Route::post('/verification/student',[VerificationController::class,'student']);
 Route::post('/verification/teacher',[VerificationController::class,'teacher']);
+Route::get('/history',[VerificationController::class,'student_history']);
 
 //Subject
 Route::post('/subject/add',[SubjectController::class,'add']);

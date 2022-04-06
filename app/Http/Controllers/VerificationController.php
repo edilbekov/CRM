@@ -50,4 +50,8 @@ class VerificationController extends Controller
         }
         return ResponseController::success();
     }
+    public function student_history(){
+        $all=Verification::all();
+        return ResponseController::data($all);
+    }
 }
