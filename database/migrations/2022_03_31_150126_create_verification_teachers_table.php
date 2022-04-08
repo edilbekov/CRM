@@ -16,7 +16,7 @@ class CreateVerificationTeachersTable extends Migration
         Schema::create('verification_teachers', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(App\Models\Group::class);
-            $table->foreignIdFor(\App\Models\Teacher::class);
+            $table->foreignIdFor(\App\Models\Employer::class);
             $table->boolean('exist')->default(true);
             $table->timestamps();
         });

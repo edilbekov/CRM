@@ -2,50 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Teacher;
+use App\Models\Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
 {
     public function add(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
             'phone'=>'required|min:9|max:13|unique:teachers,phone'            ,
             'password'=>'required'
         ]);
-        Teacher::create([
+
+        if($validation->fails()){
+            return ResponseController::error($validation->errors()->first(), 422);            
+        }
+        
+        Employer::create([
             'full_name'=>$request->full_name,                        
             'phone'=>$request->phone,
-            'password'=>Hash::make($request->password)
+            'password'=>Hash::make($request->password),
+            'role'=>'teacher'
         ]);        
         return ResponseController::success();        
     }
 
     public function edit(Request $request,$id){        
-        $request->validate([
-            'full_name'=>'required|min:3|max:10',                        
-            'phone'=>'required|min:9|max:13',
+        $validation = Validator::make($request->all(), [
+            'full_name'=>'required|min:3|max:30',                        
+            'phone'=>'required|min:9|max:13|unique:teachers,phone'            ,
             'password'=>'required'
         ]);
-        $true=Teacher::where('id',$id)->where('role','teacher')->update([
+
+        if($validation->fails()){
+            return ResponseController::error($validation->errors()->first(), 422);            
+        }
+        Employer::where('id',$id)->where('role','teacher')->update([
             'full_name'=>$request->full_name,            
             'phone'=>$request->phone,
-            'password'=>Hash::make($request->password)
-        ]);
-        if($true){
-            return ResponseController::success();
-        }
-        return ResponseController::error(['message'=>$true->errors()]);
+            'password'=>Hash::make($request->password),
+            'role'=>'teacher'
+        ]);        
+        return ResponseController::success();        
     }
 
     public function delete($id){
-        Teacher::where('id',$id)->delete();
+        Employer::where('id',$id)->delete();
         return ResponseController::success();
     }
     public function view(){
-        $all=Teacher::all();
+        $all=Employer::where('role','teacher')->get();
         return ResponseController::data($all);
     }
 }

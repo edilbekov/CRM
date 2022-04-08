@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Course;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
     public function add(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
             'phone'=>'required|min:9|max:13',
-            'password'=>'required'            
-        ]);        
+            'password'=>'required'
+        ]);
+
+        if($validation->fails()){
+            return ResponseController::error($validation->errors()->first(), 422);            
+        }      
+             
         Student::create([
             'full_name'=>$request->full_name,            
             'phone'=>$request->phone,
@@ -25,20 +31,22 @@ class StudentController extends Controller
         return ResponseController::success();        
     }
     public function edit(Request $request,$id){             
-        $request->validate([
-            'full_name'=>'required|min:3|max:30',            
+        $validation = Validator::make($request->all(), [
+            'full_name'=>'required|min:3|max:30',                        
             'phone'=>'required|min:9|max:13',
             'password'=>'required'
         ]);
-        $true=Student::where('id',$id)->update([
+
+        if($validation->fails()){
+            return ResponseController::error($validation->errors()->first(), 422);            
+        }
+
+        Student::where('id',$id)->update([
             'full_name'=>$request->full_name,            
             'phone'=>$request->phone,
             'password'=>Hash::make($request->password)               
-        ]);
-        if($true){
-            return ResponseController::success();
-        }
-        return ResponseController::error(['message'=>$true->errors()]);
+        ]);        
+        return ResponseController::success();        
     }
     public function delete($id){
         Student::where('id',$id)->delete();

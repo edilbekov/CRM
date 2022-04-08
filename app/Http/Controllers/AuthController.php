@@ -12,11 +12,11 @@ class AuthController extends Controller
         $phone=$request->phone;
         $password=$request->password;
 
-        $employers=Employer::where('phone',$phone)->first();
-        if(!$employers or !Hash::check($password,$employers->password)){
+        $employer=Employer::where('phone',$phone)->first();        
+        if(!$employer or !Hash::check($password,$employer->password)){
             return abort(401);
-        }
-        $token=$employers->createToken('employers')->plainTextToken;
+        }        
+        $token=$employer->createToken('employer')->plainTextToken;        
         return ResponseController::data(['token'=>$token]);
     }
 }

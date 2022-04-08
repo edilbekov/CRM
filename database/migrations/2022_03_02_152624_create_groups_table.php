@@ -15,7 +15,7 @@ class CreateGroupsTable extends Migration
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(App\Models\Teacher::class);
+            $table->foreignIdFor(App\Models\Employer::class);
             $table->foreignIdFor(App\Models\Period::class);
             $table->string('name');                        
             $table->json('days');

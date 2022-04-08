@@ -4,40 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
     public function add(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(), [
             'group_id'=>'required',
             'student_id'=>'required',
             'price'=>'required'
         ]);
-        $true=Course::create([
+
+        if($validation->fails()){
+            return ResponseController::error($validation->errors()->first(), 422);            
+        }
+        
+        Course::create([
             'group_id'=>$request->group_id,
             'student_id'=>$request->student_id,
             'price'=>$request->price
-        ]);
-        if($true){
-            return ResponseController::success();
-        }
-        return ResponseController::error(['message'=>$true->errors()]);
+        ]);        
+        return ResponseController::success();                
     }
     public function edit(Request $request,$id){
-        $request->validate([
+        $validation = Validator::make($request->all(), [
             'group_id'=>'required',
             'student_id'=>'required',
             'price'=>'required'
         ]);
-        $true=Course::where('id',$id)->update([
+
+        if($validation->fails()){
+            return ResponseController::error($validation->errors()->first(), 422);            
+        }
+        Course::where('id',$id)->update([
             'group_id'=>$request->group_id,
             'student_id'=>$request->student_id,
             'price'=>$request->price
-        ]);
-        if($true){
-            return ResponseController::success();
-        }
-        return ResponseController::error(['message'=>$true->errors()]);
+        ]);        
+        return ResponseController::success();                
     }
     public function delete($id){
         Course::where('id',$id)->delete();
