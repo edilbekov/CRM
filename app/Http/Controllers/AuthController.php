@@ -17,6 +17,6 @@ class AuthController extends Controller
             return abort(401);
         }        
         $token=$employer->createToken('employer')->plainTextToken;        
-        return ResponseController::data(['token'=>$token]);
+        return ResponseController::data(['role'=>$employer->role,'token'=>$token]);
     }
 }

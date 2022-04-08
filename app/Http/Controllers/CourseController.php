@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Validator;
 class CourseController extends Controller
 {
     public function add(Request $request){
+        $role  = $request->user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
+        }
         $validation = Validator::make($request->all(), [
             'group_id'=>'required',
             'student_id'=>'required',

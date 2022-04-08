@@ -39,4 +39,8 @@ class SubjectController extends Controller
         Subject::where('id',$id)->delete();
         return ResponseController::success();
     }
+    public function view(){
+        $subjects=Subject::select('name')->get();
+        return ResponseController::data($subjects);
+    }
 }

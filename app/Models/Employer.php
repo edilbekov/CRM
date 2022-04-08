@@ -13,4 +13,10 @@ class Employer extends Authenticatable
 {
     use HasFactory;
     use HasApiTokens;
+    protected $casts=[
+        'active'=>'boolean',
+    ];
+    protected $hidden=[
+        'password'
+    ];
 }

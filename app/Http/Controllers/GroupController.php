@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller
 {
-    public function add(Request $request){    
+    public function add(Request $request){             
         $validation = Validator::make($request->all(), [
             'teacher_id'=>'required',
             'period_id'=>'required',
@@ -40,7 +40,7 @@ class GroupController extends Controller
         }    
         $days=json_encode($all_days);    
         Group::create([
-            'teacher_id'=>$request->teacher_id,
+            'employer_id'=>$request->teacher_id,
             'period_id'=>$request->period_id,
             'name'=>$request->name,            
             'days'=>$days,
@@ -51,7 +51,7 @@ class GroupController extends Controller
     }
     public function edit(Request $request,$id){        
         $validation = Validator::make($request->all(), [
-            'teacher_id'=>'required',
+            'employer_id'=>'required',
             'period_id'=>'required',
             'name'=>'required',            
             'days'=>'required',            
@@ -79,7 +79,7 @@ class GroupController extends Controller
         }    
         $days=json_encode($all_days);
         $true=Group::where('id',$id)->update([
-            'teacher_id'=>$request->teacher_id,
+            'employer_id'=>$request->teacher_id,
             'period_id'=>$request->period_id,
             'name'=>$request->name,            
             'days'=>$days,            
@@ -91,5 +91,9 @@ class GroupController extends Controller
     public function delete($id){
         Group::where('id',$id)->delete();
         return ResponseController::success();
+    }
+    public function view(){
+        $groups=Group::select('employer_id','period_id','name','days','start_date','end_date');
+        return ResponseController::data($groups);
     }
 }

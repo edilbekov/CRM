@@ -34,4 +34,8 @@ class PeriodController extends Controller
         Period::where('id',$id)->delete();
         return ResponseController::success();
     }
+    public function view(){
+        $periods=Period::select('period','start_time','finish_time')->get();
+        return ResponseController::data($periods);
+    }
 }

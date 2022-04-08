@@ -14,7 +14,6 @@ use App\Http\Controllers\VerificationController;
 
 //Login
 Route::post('/login',[AuthController::class,'login']);
-
 Route::middleware('auth:sanctum')->group(function(){
     //Teacher
     Route::post('/teacher/add',[TeacherController::class,'add']);
@@ -31,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/group/add',[GroupController::class,'add']);
     Route::patch('/group/edit/{id}',[GroupController::class,'edit']);
     Route::delete('/group/delete/{id}',[GroupController::class,'delete']);
+    Route::get('/group/view',[GroupController::class,'view']);
 
     //Course
     Route::post('/course/add',[CourseController::class,'add']);
@@ -44,14 +44,16 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/period/add',[PeriodController::class,'add']);
     Route::patch('/period/edit/{id}',[PeriodController::class,'edit']);
     Route::delete('/period/delete/{id}',[PeriodController::class,'delete']);
+    Route::get('/period/view',[PeriodController::class,'view']);
 
     //Verification
     Route::post('/verification/student',[VerificationController::class,'student']);
     Route::post('/verification/teacher',[VerificationController::class,'teacher']);
-    Route::get('/history',[VerificationController::class,'student_history']);
+    Route::get('/verification/history',[VerificationController::class,'student_history']);
 
     //Subject
     Route::post('/subject/add',[SubjectController::class,'add']);
     Route::patch('/subject/edit/{id}',[SubjectController::class,'edit']);
     Route::delete('/subject/delete/{id}',[SubjectController::class,'delete']);
+    Route::get('/subject/view',[SubjectController::class,'view']);
 });

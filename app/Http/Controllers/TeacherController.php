@@ -10,21 +10,20 @@ use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
 {
-    public function add(Request $request){
+    public function add(Request $request){        
         $role  = $request->user()->role;
         if($role != "admin"){
             return ResponseController::error('No permission', 403);
-        }
+        }        
         $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
-            'phone'=>'required|min:9|max:13|unique:teachers,phone'            ,
+            'phone'=>'required|min:9|max:13|unique:employers,phone'            ,
             'password'=>'required'
         ]);
 
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);            
-        }
-        
+        }        
         Employer::create([
             'full_name'=>$request->full_name,                        
             'phone'=>$request->phone,
@@ -42,14 +41,16 @@ class TeacherController extends Controller
         
         $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
-            'phone'=>'required|min:9|max:13|unique:teachers,phone'            ,
+            'phone'=>'required|min:9|max:13|unique:employers,phone'            ,
             'password'=>'required'
         ]);
 
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);            
         }
-        Employer::where('id',$id)->where('role','teacher')->update([
+
+        $employer=Employer::where('id',$id)->where('role','teacher')->firstOrFail();
+        $employer->update([
             'full_name'=>$request->full_name,            
             'phone'=>$request->phone,
             'password'=>Hash::make($request->password),
@@ -63,7 +64,7 @@ class TeacherController extends Controller
         return ResponseController::success();
     }
     public function view(){
-        $all=Employer::where('role','teacher')->get();
+        $all=Employer::select('full_name','phone','active')->where('role','teacher')->get();
         return ResponseController::data($all);
     }
 }
