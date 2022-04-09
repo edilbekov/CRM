@@ -6,10 +6,15 @@ use Carbon\Carbon;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
-    public function add(Request $request){             
+    public function add(Request $request){  
+        $role  = $request->user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
+        }           
         $validation = Validator::make($request->all(), [
             'teacher_id'=>'required',
             'period_id'=>'required',
@@ -49,7 +54,11 @@ class GroupController extends Controller
         ]);           
         return ResponseController::success();        
     }
-    public function edit(Request $request,$id){        
+    public function edit(Request $request,$id){   
+        $role  = $request->user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
+        }     
         $validation = Validator::make($request->all(), [
             'employer_id'=>'required',
             'period_id'=>'required',
@@ -89,6 +98,10 @@ class GroupController extends Controller
         return ResponseController::success();                
     }
     public function delete($id){
+        $role  = Auth::user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
+        }
         Group::where('id',$id)->delete();
         return ResponseController::success();
     }

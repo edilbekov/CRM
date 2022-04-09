@@ -11,6 +11,10 @@ use App\Models\VerificationTeacher;
 class VerificationController extends Controller
 {
     public function student(Request $request){
+        $role  = $request->user()->role;
+        if($role != "teacher"){
+            return ResponseController::error('No permission', 403);
+        }   
         $verification=$request->verification;
         $student_id=$request->student_id;
         $group_id=Group::select('id')->where('student_id',$student_id)->first();

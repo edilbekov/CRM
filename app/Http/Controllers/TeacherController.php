@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
@@ -60,6 +61,10 @@ class TeacherController extends Controller
     }
 
     public function delete($id){
+        $role  = Auth::user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
+        }   
         Employer::where('id',$id)->delete();
         return ResponseController::success();
     }

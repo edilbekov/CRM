@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
@@ -31,6 +32,10 @@ class CourseController extends Controller
         return ResponseController::success();                
     }
     public function edit(Request $request,$id){
+        $role  = $request->user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
+        }
         $validation = Validator::make($request->all(), [
             'group_id'=>'required',
             'student_id'=>'required',
@@ -48,6 +53,10 @@ class CourseController extends Controller
         return ResponseController::success();                
     }
     public function delete($id){
+        $role  = Auth::user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
+        }
         Course::where('id',$id)->delete();
         return ResponseController::success();
     }
