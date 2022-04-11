@@ -11,9 +11,10 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\VerificationController;
+use App\Models\Student;
 
 //Login
-Route::post('/login',[AuthController::class,'login']);
+Route::post('/login',[AuthController::class,'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function(){
     //Teacher
     Route::post('/teacher/add',[TeacherController::class,'add']);
@@ -24,13 +25,14 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/student/add',[StudentController::class,'add']);
     Route::patch('/student/edit/{id}',[StudentController::class,'edit']);
     Route::delete('/student/delete/{id}',[StudentController::class,'delete']);
-    Route::get('/student/view/{group_id}',[StudentController::class,'view']);
+    Route::get('/students/view',[StudentController::class,'students']);
 
     //Group
     Route::post('/group/add',[GroupController::class,'add']);
     Route::patch('/group/edit/{id}',[GroupController::class,'edit']);
     Route::delete('/group/delete/{id}',[GroupController::class,'delete']);
     Route::get('/group/view',[GroupController::class,'view']);
+    Route::get('/group/students/{id}',[GroupController::class,'students']);
 
     //Course
     Route::post('/course/add',[CourseController::class,'add']);

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class StudentController extends Controller
 {
@@ -52,12 +53,8 @@ class StudentController extends Controller
         Student::where('id',$id)->delete();
         return ResponseController::success();
     }
-    public function view($group_id){
-        $student_ids=Course::select('student_id')->where('group_id',$group_id)->get();
-        $students=[];
-        foreach($student_ids as $id){
-            $students[]=Student::where('id',$id)->first();
-        }
+    public function students(){
+        $students=Student::select('full_name','phone')->get();
         return ResponseController::data($students);
     }
 }

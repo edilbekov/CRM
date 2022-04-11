@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Group;
+use App\Models\Course;
+use App\Models\Student;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class GroupController extends Controller
 {
@@ -84,7 +86,7 @@ class GroupController extends Controller
             if(in_array($carbon->dayOfWeek,$request->days)){
                 $all_days[]=$carbon->format('Y.m.d');
             }
-            $carbon->addDays();
+            $carbon->addDays();            
         }    
         $days=json_encode($all_days);
         $true=Group::where('id',$id)->update([
@@ -105,8 +107,36 @@ class GroupController extends Controller
         Group::where('id',$id)->delete();
         return ResponseController::success();
     }
-    public function view(){
-        $groups=Group::select('employer_id','period_id','name','days','start_date','end_date');
-        return ResponseController::data($groups);
+    public function view(){        
+        $groups=Group::select('employer_id','period_id','name','days','start_date','end_date')->get();
+        $final=[];        
+        foreach($groups as $group){
+            $final[]=[
+                'name'=>$group->name,
+                'teacher'=>[
+                    'id'=>$group->teacher->id,
+                    'name'=>$group->teacher->name
+                ],
+                'period'=>[
+                    'id'=>$group->period->id,
+                    'period'=>$group->period->period,
+                    'start_time'=>$group->period->start_time,
+                    'finish_time'=>$group->period->finish_time
+                ],
+                'days'=>$group->days,
+                'start_date'=>$group->start_date,
+                'end_date'=>$group->end_date
+            ];
+        }
+        return ResponseController::data($final);
+    }
+    public function students($group_id){
+        return $group_id;
+        $student_ids=Course::select('student_id')->where('group_id',$group_id)->get();
+        $students=[];
+        foreach($student_ids as $id){
+            $students[]=Student::where('id',$id)->first();
+        }
+        return ResponseController::data($students);
     }
 }
