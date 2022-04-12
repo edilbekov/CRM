@@ -16,7 +16,7 @@ class CourseController extends Controller
         }
         $validation = Validator::make($request->all(), [
             'group_id'=>'required',
-            'student_id'=>'required',
+            'student_id'=>'required|unique:courses,student_id',
             'price'=>'required'
         ]);
 

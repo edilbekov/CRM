@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Course;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,17 +12,17 @@ use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class StudentController extends Controller
 {
-    public function add(Request $request){
+    public function add(Request $request){        
         $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
-            'phone'=>'required|min:9|max:13',
+            'phone'=>'required|min:9|max:13|unique:students,phone',
             'password'=>'required'
         ]);
 
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);            
         }      
-             
+        
         Student::create([
             'full_name'=>$request->full_name,            
             'phone'=>$request->phone,

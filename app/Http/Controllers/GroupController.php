@@ -28,8 +28,7 @@ class GroupController extends Controller
 
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);            
-        }              
-        
+        }                      
         $date=$request->start_date;        
         $start_year=$date['year'];
         $start_month=$date['month'];
@@ -107,7 +106,7 @@ class GroupController extends Controller
         Group::where('id',$id)->delete();
         return ResponseController::success();
     }
-    public function view(){        
+    public function view(){                
         $groups=Group::select('employer_id','period_id','name','days','start_date','end_date')->get();
         $final=[];        
         foreach($groups as $group){
@@ -115,13 +114,13 @@ class GroupController extends Controller
                 'name'=>$group->name,
                 'teacher'=>[
                     'id'=>$group->teacher->id,
-                    'name'=>$group->teacher->name
+                    'name'=>$group->teacher->full_name
                 ],
                 'period'=>[
-                    'id'=>$group->period->id,
-                    'period'=>$group->period->period,
-                    'start_time'=>$group->period->start_time,
-                    'finish_time'=>$group->period->finish_time
+                    'id'=>$group->period->id ?? null,
+                    'period'=>$group->period->period ?? null,
+                    'start_time'=>$group->period->start_time ?? null,
+                    'finish_time'=>$group->period->finish_time ?? null
                 ],
                 'days'=>$group->days,
                 'start_date'=>$group->start_date,
@@ -130,12 +129,12 @@ class GroupController extends Controller
         }
         return ResponseController::data($final);
     }
-    public function students($group_id){
-        return $group_id;
+    public function students(Request $request, $group_id){
         $student_ids=Course::select('student_id')->where('group_id',$group_id)->get();
-        $students=[];
-        foreach($student_ids as $id){
-            $students[]=Student::where('id',$id)->first();
+        $students=[];        
+        foreach($student_ids as $id){   
+            $id=$id->student_id;                     
+            $students[]=Student::select('full_name','phone')->where('id',$id)->first();            
         }
         return ResponseController::data($students);
     }

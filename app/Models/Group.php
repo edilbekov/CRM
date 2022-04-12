@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Group extends Model
 {
     use HasFactory;
-    protected $fillable=['teacher_id','period_id','name','days','start_date','end_date'];
+    protected $fillable=['employer_id','period_id','name','days','start_date','end_date'];
     protected $casts=[
-        'days'=>'array'
+        'days'=>'array'        
     ];
     public function teacher(){
         return $this->belongsTo(Employer::class,'employer_id');
