@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function(){
     //Verification
     Route::post('/verification/student',[VerificationController::class,'student']);
     Route::post('/verification/teacher',[VerificationController::class,'teacher']);
-    Route::get('/verification/history/students',[VerificationController::class,'student_history']);
+    Route::get('/verification/history/students/{id}',[VerificationController::class,'student_history']);
     Route::get('/verification/history/teachers',[VerificationController::class,'teacher_history']);
 
     //Subject
