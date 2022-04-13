@@ -21,6 +21,7 @@ class CreateGroupsTable extends Migration
             $table->json('days');
             $table->date('start_date');
             $table->date('end_date');
+            $table->json('daysofweek');
             $table->boolean('active')->default(true);
             $table->timestamps();
         });

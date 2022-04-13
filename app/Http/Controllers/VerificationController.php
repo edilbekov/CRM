@@ -15,47 +15,70 @@ class VerificationController extends Controller
         if($role != "teacher"){
             return ResponseController::error('No permission', 403);
         }   
-        $verification=$request->verification;
+        $verification=$request->exist;
+        $group_id=$request->group_id;
         $student_id=$request->student_id;
-        $group_id=Group::select('id')->where('student_id',$student_id)->first();
-        if($verification==true){
-            Verification::create([
-                'group_id'=>$group_id,
-                'student_id'=>$student_id,
-                'exist'=>true
-            ]);
-        }
-        elseif($verification==false){
-            Verification::create([
-                'group_id'=>$group_id,
-                'student_id'=>$student_id,
-                'exist'=>false
-            ]);
-        }
+        
+        Verification::create([
+            'group_id'=>$group_id,
+            'student_id'=>$student_id,
+            'date'=>$request->date,
+            'exist'=>$verification
+        ]);        
         return ResponseController::success();
     }
     public function teacher(Request $request){
-        $verification=$request->verification;
-        $teacher_id=$request->teacher_id;
-        $group_id=Group::select('id')->where('teacher_id',$teacher_id)->first();
-        if($verification==true){
-            VerificationTeacher::create([
-                'group_id'=>$group_id,
-                'teacher_id'=>$teacher_id,
-                'exist'=>true
-            ]);
+        $role  = $request->user()->role;
+        if($role != "admin"){
+            return ResponseController::error('No permission', 403);
         }
-        elseif($verification==false){
-            VerificationTeacher::create([
-                'group_id'=>$group_id,
-                'teacher_id'=>$teacher_id,
-                'exist'=>false
-            ]);
-        }
+        $verification=$request->exist;
+        $group_id=$request->group_id;
+        $teacher_id=$request->teacher_id;                
+        VerificationTeacher::create([
+            'group_id'=>$group_id,
+            'employer_id'=>$teacher_id,
+            'date'=>$request->date,
+            'exist'=>$verification
+        ]);        
         return ResponseController::success();
     }
     public function student_history(){
-        $all=Verification::all();
-        return ResponseController::data($all);
+        $all=Verification::select('group_id','student_id','date','exist')->get();
+        $final=[];
+        foreach($all as $item){
+            $final[]=[
+                'group'=>[
+                    'id'=>$item->group->id,
+                    'name'=>$item->group->name
+                ],
+                'student'=>[
+                    'id'=>$item->student->id,
+                    'name'=>$item->student->full_name
+                ],
+                'date'=>$item->date,
+                'exist'=>$item->exist
+            ];
+        }
+        return ResponseController::data($final);
+    }
+    public function teacher_history(){
+        $all=VerificationTeacher::select('group_id','employer_id','date','exist')->get();
+        $final=[];
+        foreach($all as $item){
+            $final[]=[
+                'group'=>[
+                    'id'=>$item->group->id,
+                    'name'=>$item->group->name
+                ],
+                'employer'=>[
+                    'id'=>$item->employer->id,
+                    'name'=>$item->employer->full_name
+                ],
+                'date'=>$item->date,
+                'exist'=>$item->exist
+            ];
+        }
+        return ResponseController::data($final);
     }
 }

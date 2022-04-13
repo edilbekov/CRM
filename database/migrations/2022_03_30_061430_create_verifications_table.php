@@ -17,6 +17,7 @@ class CreateVerificationsTable extends Migration
             $table->id();
             $table->foreignIdFor(App\Models\Group::class);
             $table->foreignIdFor(\App\Models\Student::class);
+            $table->date('date');
             $table->boolean('exist')->default(true);
             $table->timestamps();
         });

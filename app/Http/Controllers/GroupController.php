@@ -16,7 +16,7 @@ class GroupController extends Controller
         $role  = $request->user()->role;
         if($role != "admin"){
             return ResponseController::error('No permission', 403);
-        }           
+        }                   
         $validation = Validator::make($request->all(), [
             'teacher_id'=>'required',
             'period_id'=>'required',
@@ -28,7 +28,9 @@ class GroupController extends Controller
 
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);            
-        }                      
+        }    
+        
+        $daysofweek=$request->days;                
         $date=$request->start_date;        
         $start_year=$date['year'];
         $start_month=$date['month'];
@@ -44,14 +46,15 @@ class GroupController extends Controller
             }
             $carbon->addDays();
         }    
-        $days=json_encode($all_days);    
+        $days=json_encode($all_days);            
         Group::create([
             'employer_id'=>$request->teacher_id,
             'period_id'=>$request->period_id,
             'name'=>$request->name,            
             'days'=>$days,
             'start_date'=>$start_date,
-            'end_date'=>$request->end_date            
+            'end_date'=>$request->end_date,
+            'daysofweek'=>json_encode($daysofweek)     
         ]);           
         return ResponseController::success();        
     }
@@ -71,7 +74,8 @@ class GroupController extends Controller
 
         if($validation->fails()){
             return ResponseController::error($validation->errors()->first(), 422);            
-        }      
+        }  
+        $daysofweek=$request->days;    
         $date=$request->start_date;        
         $start_year=$date['year'];
         $start_month=$date['month'];
@@ -94,7 +98,8 @@ class GroupController extends Controller
             'name'=>$request->name,            
             'days'=>$days,            
             'start_date'=>$start_date,
-            'end_date'=>$request->end_date            
+            'end_date'=>$request->end_date,
+            'daysofweek'=>$daysofweek
         ]);        
         return ResponseController::success();                
     }
@@ -107,7 +112,7 @@ class GroupController extends Controller
         return ResponseController::success();
     }
     public function view(){                
-        $groups=Group::select('employer_id','period_id','name','days','start_date','end_date')->get();
+        $groups=Group::select('employer_id','period_id','name','days','start_date','end_date','daysofweek')->get();
         $final=[];        
         foreach($groups as $group){
             $final[]=[
@@ -123,6 +128,7 @@ class GroupController extends Controller
                     'finish_time'=>$group->period->finish_time ?? null
                 ],
                 'days'=>$group->days,
+                'daysofweek'=>$group->daysofweek,
                 'start_date'=>$group->start_date,
                 'end_date'=>$group->end_date
             ];
