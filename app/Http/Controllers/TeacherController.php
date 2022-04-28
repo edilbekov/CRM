@@ -18,7 +18,7 @@ class TeacherController extends Controller
         }        
         $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
-            'phone'=>'required|min:9|max:13|unique:employers,phone'            ,
+            'phone'=>'required|min:9|max:13|unique:employers,phone',
             'password'=>'required'
         ]);
 
@@ -42,7 +42,7 @@ class TeacherController extends Controller
         
         $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
-            'phone'=>'required|min:9|max:13|unique:employers,phone'            ,
+            'phone'=>'required|min:9|max:13|unique:employers,phone',
             'password'=>'required'
         ]);
 
