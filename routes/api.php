@@ -9,6 +9,7 @@ use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\VerificationController;
 use App\Models\Student;
@@ -21,6 +22,11 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::patch('/teacher/edit/{id}',[TeacherController::class,'edit']);
     Route::delete('/teacher/delete/{id}',[TeacherController::class,'delete']);
     Route::get('/teacher/view',[TeacherController::class,'view']);
+    //Teacher
+    Route::post('/admin/add',[AdminController::class,'add']);
+    Route::patch('/admin/edit/{id}',[AdminController::class,'edit']);
+    Route::delete('/admin/delete/{id}',[AdminController::class,'delete']);
+    Route::get('/admin/view',[AdminController::class,'view']);
     //Student
     Route::post('/student/add',[StudentController::class,'add']);
     Route::patch('/student/edit/{id}',[StudentController::class,'edit']);

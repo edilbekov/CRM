@@ -6,10 +6,9 @@ use App\Models\Employer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 
-class TeacherController extends Controller
+class AdminController extends Controller
 {
     public function add(Request $request){        
         $role  = $request->user()->role;
@@ -29,14 +28,12 @@ class TeacherController extends Controller
             'full_name'=>$request->full_name,                        
             'phone'=>$request->phone,
             'password'=>Hash::make($request->password),
-            'role'=>'teacher'
+            'role'=>'admin'
         ]);        
-        $all=Employer::select('id','full_name','phone','password')->where('phone',$request->phone)->first();
+        $all=Employer::select('full_name','phone','password')->where('phone',$request->phone)->first();
         return ResponseController::data($all);
-        // return ResponseController::success();        
     }
-
-    public function edit(Request $request,$id){        
+    public function edit(Request $request,$id){
         $role  = $request->user()->role;
         if($role != "admin"){
             return ResponseController::error('No permission', 403);
@@ -52,16 +49,16 @@ class TeacherController extends Controller
             return ResponseController::error($validation->errors()->first(), 422);            
         }
 
-        $employer=Employer::where('id',$id)->where('role','teacher')->firstOrFail();
+        $employer=Employer::where('id',$id)->where('role','admin')->firstOrFail();
         $employer->update([
             'full_name'=>$request->full_name,            
             'phone'=>$request->phone,
             'password'=>Hash::make($request->password),
-            'role'=>'teacher'
+            'role'=>'admin'
         ]);        
-        return ResponseController::success();        
+        $all=Employer::select('full_name','phone','password')->where('phone',$request->phone)->first();
+        return ResponseController::data($all);
     }
-
     public function delete($id){
         $role  = Auth::user()->role;
         if($role != "admin"){
@@ -71,7 +68,7 @@ class TeacherController extends Controller
         return ResponseController::success();
     }
     public function view(){
-        $all=Employer::select('full_name','phone','active')->where('role','teacher')->get();
+        $all=Employer::select('full_name','phone','active')->where('role','admin')->get();
         return ResponseController::data($all);
     }
 }
