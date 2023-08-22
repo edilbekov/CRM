@@ -15,8 +15,7 @@ class StudentController extends Controller
     public function add(Request $request){        
         $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
-            'phone'=>'required|min:9|max:13|unique:students,phone',
-            'password'=>'required'
+            'phone'=>'required|min:9|max:13|unique:students,phone'            
         ]);
 
         if($validation->fails()){
@@ -25,16 +24,14 @@ class StudentController extends Controller
         
         Student::create([
             'full_name'=>$request->full_name,            
-            'phone'=>$request->phone,
-            'password'=>Hash::make($request->password)
+            'phone'=>$request->phone            
         ]);        
         return ResponseController::success();        
     }
     public function edit(Request $request,$id){             
         $validation = Validator::make($request->all(), [
             'full_name'=>'required|min:3|max:30',                        
-            'phone'=>'required|min:9|max:13',
-            'password'=>'required'
+            'phone'=>'required|min:9|max:13'            
         ]);
 
         if($validation->fails()){
@@ -43,8 +40,7 @@ class StudentController extends Controller
 
         Student::where('id',$id)->update([
             'full_name'=>$request->full_name,            
-            'phone'=>$request->phone,
-            'password'=>Hash::make($request->password)               
+            'phone'=>$request->phone            
         ]);        
         return ResponseController::success();        
     }
@@ -53,7 +49,7 @@ class StudentController extends Controller
         return ResponseController::success();
     }
     public function students(){
-        $students=Student::select('full_name','phone')->get();
+        $students=Student::select('id','full_name','phone')->get();
         return ResponseController::data($students);
     }
 }

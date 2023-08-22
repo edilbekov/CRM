@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employer;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,7 +72,7 @@ class TeacherController extends Controller
         return ResponseController::success();
     }
     public function view(){
-        $all=Employer::select('full_name','phone','active')->where('role','teacher')->get();
+        $all=Employer::select('id','full_name','phone','active')->where('role','teacher')->get();        
         return ResponseController::data($all);
     }
 }

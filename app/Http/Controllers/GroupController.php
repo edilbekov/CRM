@@ -118,8 +118,8 @@ class GroupController extends Controller
             $final[]=[
                 'name'=>$group->name,
                 'teacher'=>[
-                    'id'=>$group->teacher->id,
-                    'name'=>$group->teacher->full_name
+                    'id'=>$group->teacher->id ?? null,
+                    'name'=>$group->teacher->full_name ?? null
                 ],
                 'period'=>[
                     'id'=>$group->period->id ?? null,

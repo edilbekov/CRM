@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\VerificationController;
 use App\Models\Student;
+use Illuminate\Support\Facades\Artisan;
 
 //Login
 Route::post('/login',[AuthController::class,'login'])->name('login');
@@ -65,4 +66,9 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::patch('/subject/edit/{id}',[SubjectController::class,'edit']);
     Route::delete('/subject/delete/{id}',[SubjectController::class,'delete']);
     Route::get('/subject/view',[SubjectController::class,'view']);
+});
+
+Route::get('/migrate/fresh', function(){
+    Artisan::call('migrate:fresh');
+    return "okay";
 });

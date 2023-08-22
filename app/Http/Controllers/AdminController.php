@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    public function add(Request $request){        
+    public function add(Request $request){                
         $role  = $request->user()->role;
         if($role != "admin"){
             return ResponseController::error('No permission', 403);
@@ -56,8 +56,9 @@ class AdminController extends Controller
             'password'=>Hash::make($request->password),
             'role'=>'admin'
         ]);        
-        $all=Employer::select('full_name','phone','password')->where('phone',$request->phone)->first();
-        return ResponseController::data($all);
+        // $all=Employer::select('full_name','phone','password')->where('phone',$request->phone)->first();
+        // return ResponseController::data($all);
+        return ResponseController::success();
     }
     public function delete($id){
         $role  = Auth::user()->role;
@@ -68,7 +69,7 @@ class AdminController extends Controller
         return ResponseController::success();
     }
     public function view(){
-        $all=Employer::select('full_name','phone','active')->where('role','admin')->get();
+        $all=Employer::select('id','full_name','phone','active')->where('role','admin')->get();
         return ResponseController::data($all);
     }
 }
